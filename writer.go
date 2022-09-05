@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"net"
 	"sync"
@@ -677,6 +678,8 @@ func (w *Writer) WriteMessages(ctx context.Context, msgs ...Message) error {
 			werr[i] = batch.err
 		}
 	}
+
+	fmt.Printf("-------------------bbbbb len:%v\n", len(w.writers))
 	return werr
 }
 
@@ -698,6 +701,7 @@ func (w *Writer) batchMessages(messages []Message, assignments map[topicPartitio
 		if writer == nil {
 			writer = newPartitionWriter(w, key)
 			w.writers[key] = writer
+			fmt.Printf("---------------------------- aaaaa: %v-%v\n", key.topic, key.partition)
 		}
 		wbatches := writer.writeMessages(messages, indexes)
 
